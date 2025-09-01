@@ -1,4 +1,5 @@
-//include { MASURCA_SAMBA                          } from '../../../modules/local/masurca/samba'
+include { NTLINK_GAP_FILL                       } from '../../../modules/local/ntlink/gap_fill'
+include { MASURCA_SAMBA                         } from '../../../modules/local/masurca/samba'
 include { SEQKIT_FQ2FA                          } from '../../../modules/nf-core/seqkit/fq2fa'
 include { TGSGAPCLOSER                          } from '../../../modules/local/tgsgapcloser'
 
@@ -13,19 +14,35 @@ workflow CLOSE_GAPS {
 
     ch_versions = Channel.empty()
 
-    // we need reads in Fasta format for TGS Gap Closer
-    SEQKIT_FQ2FA ( ch_long_reads )
+    if ( params.gap_closer == "ntlink" ) {
 
-    ch_assemblies
-        .join ( SEQKIT_FQ2FA.out.fasta )
-        .set { tgsgapcloser_input }
+        NTLINK_GAP_FILL (
+            ch_assemblies.join ( ch_long_reads )
+        )
+        NTLINK_GAP_FILL.out.fasta.set { ch_gap_filled_assemblies }
 
-    TGSGAPCLOSER( tgsgapcloser_input )
+    } else if ( params.gap_closer == "samba" ) {
 
-    ch_versions = ch_versions.mix ( SEQKIT_FQ2FA.out.versions )
+        MASURCA_SAMBA (
+            ch_assemblies.join ( ch_long_reads )
+        )
+        MASURCA_SAMBA.out.scaffolds_fasta.set { ch_gap_filled_assemblies }
+
+    } else if ( params.gap_closer == "tgsgapcloser" ) {
+
+        // we need reads in Fasta format for TGS Gap Closer
+        SEQKIT_FQ2FA ( ch_long_reads )
+        ch_versions = ch_versions.mix ( SEQKIT_FQ2FA.out.versions )
+
+        TGSGAPCLOSER(
+            ch_assemblies.join ( SEQKIT_FQ2FA.out.fasta )
+        )
+        TGSGAPCLOSER.out.assembly.set { ch_gap_filled_assemblies }
+    }
+
 
     emit:
-    assemblies                 = TGSGAPCLOSER.out.assembly
+    assemblies                 = ch_gap_filled_assemblies
     versions                   = ch_versions                     // channel: [ versions.yml ]
 }
 

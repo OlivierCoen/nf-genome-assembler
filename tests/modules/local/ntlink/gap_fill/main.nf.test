@@ -1,0 +1,29 @@
+nextflow_process {
+
+    name "Test Process NTLINK_GAP_FILL"
+    script "modules/local/ntlink/gap_fill/main.nf"
+    process "NTLINK_GAP_FILL"
+    tag "ntlink"
+
+    test("Should run without failures") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id: "test" ],
+                    file( '$projectDir/tests/test_data/scaffolded/a_thaliana_ont_test_scaffolds_final_purged.fa.gz', checkIfExists: true),
+                    file( '$projectDir/tests/test_data/long_reads/a_thaliana/ONT-Col-0_test_data.fastq.gz', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

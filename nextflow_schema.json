@@ -43,45 +43,6 @@
                 }
             }
         },
-        "steps": {
-            "title": "Steps",
-            "type": "object",
-            "description": "Skips specific steps",
-            "default": "",
-            "properties": {
-                "skip_short_read_preparation": {
-                    "type": "boolean",
-                    "description": "Skip long read preparation",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                "skip_short_reads_fastqc_raw": {
-                    "type": "boolean",
-                    "description": "Skip FastQC before short read preparation",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                 "skip_short_reads_cleaning": {
-                    "type": "boolean",
-                    "description": "Skip cleaning (trimming and filtering ) during short read preparation",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                "skip_short_reads_fastqc_prepared": {
-                    "type": "boolean",
-                    "description": "Skip FastQC after short read preparation",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                "skip_closing_gaps_final_assembly": {
-                    "type": "boolean",
-                    "description": "Skip the step consisting in closing gaps in the final assembly",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                "skip_hic_contact_maps": {
-                    "type": "boolean",
-                    "description": "Skip computation of Hi-C contact maps using Pretext",
-                    "fa_icon": "fas fa-check-circle"
-                }
-            },
-            "fa_icon": "fas fa-forward"
-        },
         "mapping_options": {
             "title": "Mapping options",
             "type": "object",
@@ -147,6 +108,35 @@
                     "description": "Quality control tool to use",
                     "enum": ["chopper", "seqkit_seq"],
                     "default": "chopper"
+                }
+            },
+            "fa_icon": "fas fa-forward"
+        },
+        "short_read_preparation_options": {
+            "title": "Hi-C short read preparation options",
+            "type": "object",
+            "description": "Options controlling Hi-C short read QC, trimming and filtering.",
+            "default": "",
+            "properties": {
+                "skip_short_read_preparation": {
+                    "type": "boolean",
+                    "description": "Skip long read preparation",
+                    "fa_icon": "fas fa-hand-scissors"
+                },
+                "skip_short_reads_fastqc_raw": {
+                    "type": "boolean",
+                    "description": "Skip FastQC before short read preparation",
+                    "fa_icon": "fas fa-hand-scissors"
+                },
+                 "skip_short_reads_cleaning": {
+                    "type": "boolean",
+                    "description": "Skip cleaning (trimming and filtering ) during short read preparation",
+                    "fa_icon": "fas fa-hand-scissors"
+                },
+                "skip_short_reads_fastqc_prepared": {
+                    "type": "boolean",
+                    "description": "Skip FastQC after short read preparation",
+                    "fa_icon": "fas fa-hand-scissors"
                 }
             },
             "fa_icon": "fas fa-forward"
@@ -265,6 +255,23 @@
                     "description": "Path to BAM mapping file of Hi-C reads to the assembly to be scaffolded.",
                     "help_text": "Ideally, this BAM file was obtained with the Arima mapping pipeline.",
                     "fa_icon": "fas fa-file-csv"
+                },
+                "skip_closing_gaps_final_assembly": {
+                    "type": "boolean",
+                    "description": "Skip the step consisting in closing gaps in the final assembly",
+                    "fa_icon": "fas fa-hand-scissors"
+                },
+                "gap_closer": {
+                    "type": "string",
+                    "description": "Tool to use for gap closing",
+                    "enum": ["ntlink", "tgsgapcloser", "samba"],
+                    "default": "ntlink",
+                    "fa_icon": "fas fa-hand-scissors"
+                },
+                "skip_hic_contact_maps": {
+                    "type": "boolean",
+                    "description": "Skip computation of Hi-C contact maps using Pretext",
+                    "fa_icon": "fas fa-check-circle"
                 }
             }
         },
@@ -450,10 +457,10 @@
             "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/$defs/steps"
+            "$ref": "#/$defs/long_read_preparation_options"
         },
         {
-            "$ref": "#/$defs/long_read_preparation_options"
+            "$ref": "#/$defs/short_read_preparation_options"
         },
         {
             "$ref": "#/$defs/assembly_options"
