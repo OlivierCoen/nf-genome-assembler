@@ -8,10 +8,10 @@ process QUAST {
         'community.wave.seqera.io/library/quast_pandas:45a80fbbe1a6f7b8' }"
 
     input:
-    tuple val(meta), path(assembly_list, stageAs: "*/*"), path(aln_long_reads_assembly_bam_list, stageAs: "*/*")
+    tuple val(meta), path(assembly), path(aln_long_reads_assembly_bam)
 
 
-   output:
+    output:
     path("${meta.id}*/*"),                                                                                                  emit: results
 
     path("*_quast_report.tsv"),                                                                                             topic: mqc_quast_report
@@ -23,15 +23,12 @@ process QUAST {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
 
-    def assembly = assembly_list.join(' ')
-    def bam = aln_long_reads_assembly_bam_list.join(',')
-
     """
     quast.py \\
         --output-dir ${prefix} \\
         --threads ${task.cpus} \\
-        ${assembly} \\
-        --bam ${bam} \\
+        $assembly \\
+        --bam $aln_long_reads_assembly_bam \\
         ${args}
 
     format_quast_report.py \\

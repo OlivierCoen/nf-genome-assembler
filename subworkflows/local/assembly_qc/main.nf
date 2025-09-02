@@ -45,8 +45,7 @@ workflow ASSEMBLY_QC {
         }
 
         ch_bam_ref
-            .groupTuple() // [ meta, [bam1, bam2, bam3], [ref1, ref2, ref3]
-            .map { meta, bam_list, ref_list -> [ meta, ref_list, bam_list ] } // inverting lists
+            .map { meta, bam, assembly -> [ meta, assembly, bam ] } // inverting
             .set { quast_input }
 
         QUAST( quast_input )
