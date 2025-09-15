@@ -256,7 +256,20 @@
                     "help_text": "Ideally, this BAM file was obtained with the Arima mapping pipeline.",
                     "fa_icon": "fas fa-file-csv"
                 },
-                "skip_closing_gaps_final_assembly": {
+                "skip_hic_contact_maps": {
+                    "type": "boolean",
+                    "description": "Skip computation of Hi-C contact maps using Pretext",
+                    "fa_icon": "fas fa-check-circle"
+                }
+            }
+        },
+        "gap_closing_options": {
+            "title": "Gap closing options",
+            "type": "object",
+            "description": "Options for gap closing of final assembly",
+            "default": "",
+            "properties": {
+                "skip_gap_closing": {
                     "type": "boolean",
                     "description": "Skip the step consisting in closing gaps in the final assembly",
                     "fa_icon": "fas fa-hand-scissors"
@@ -267,11 +280,6 @@
                     "enum": ["ntlink", "tgsgapcloser", "samba"],
                     "default": "ntlink",
                     "fa_icon": "fas fa-hand-scissors"
-                },
-                "skip_hic_contact_maps": {
-                    "type": "boolean",
-                    "description": "Skip computation of Hi-C contact maps using Pretext",
-                    "fa_icon": "fas fa-check-circle"
                 }
             }
         },
@@ -467,6 +475,9 @@
         },
         {
             "$ref": "#/$defs/scaffolding_options"
+        },
+        {
+            "$ref": "#/$defs/gap_closing_options"
         },
         {
             "$ref": "#/$defs/phasing_options"
