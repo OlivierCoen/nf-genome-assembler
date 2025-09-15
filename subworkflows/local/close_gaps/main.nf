@@ -19,14 +19,14 @@ workflow CLOSE_GAPS {
         NTLINK_GAP_FILL (
             ch_assemblies.join ( ch_long_reads )
         )
-        NTLINK_GAP_FILL.out.fasta.set { ch_gap_filled_assemblies }
+        NTLINK_GAP_FILL.out.fasta.set { ch_gapclosed_assemblies }
 
     } else if ( params.gap_closer == "samba" ) {
 
         MASURCA_SAMBA (
             ch_assemblies.join ( ch_long_reads )
         )
-        MASURCA_SAMBA.out.scaffolds_fasta.set { ch_gap_filled_assemblies }
+        MASURCA_SAMBA.out.scaffolds_fasta.set { ch_gapclosed_assemblies }
 
     } else if ( params.gap_closer == "tgsgapcloser" ) {
 
@@ -37,12 +37,12 @@ workflow CLOSE_GAPS {
         TGSGAPCLOSER(
             ch_assemblies.join ( SEQKIT_FQ2FA.out.fasta )
         )
-        TGSGAPCLOSER.out.assembly.set { ch_gap_filled_assemblies }
+        TGSGAPCLOSER.out.assembly.set { ch_gapclosed_assemblies }
     }
 
 
     emit:
-    assemblies                 = ch_gap_filled_assemblies
+    gapclosed_assemblies       = ch_gapclosed_assemblies
     versions                   = ch_versions                     // channel: [ versions.yml ]
 }
 
