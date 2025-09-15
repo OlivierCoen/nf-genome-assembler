@@ -8,7 +8,7 @@ process QUAST {
         'community.wave.seqera.io/library/quast_pandas:45a80fbbe1a6f7b8' }"
 
     input:
-    tuple val(meta), path(assembly), path(aln_long_reads_assembly_bam)
+    tuple val(meta), path(assembly), path(bam)
 
 
     output:
@@ -22,13 +22,12 @@ process QUAST {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-
     """
     quast.py \\
         --output-dir ${prefix} \\
         --threads ${task.cpus} \\
-        $assembly \\
-        --bam $aln_long_reads_assembly_bam \\
+        ${assembly} \\
+        --bam ${bam} \\
         ${args}
 
     format_quast_report.py \\
