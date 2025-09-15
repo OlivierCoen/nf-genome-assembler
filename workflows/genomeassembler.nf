@@ -162,7 +162,7 @@ workflow GENOMEASSEMBLER {
     // --------------------------------------------------------
     // CLOSING GAPS IN FINAL ASSEMBLY
     // --------------------------------------------------------
-    /*
+
     if ( !params.skip_gap_closing ) {
         CLOSE_GAPS (
             ch_long_reads,
@@ -171,7 +171,7 @@ workflow GENOMEASSEMBLER {
         CLOSE_GAPS.out.gapclosed_assemblies.set { ch_assemblies }
         ch_versions = ch_versions.mix ( CLOSE_GAPS.out.versions )
     }
-    */
+
     // ------------------------------------------------------------------------------------
     // QC
     // ------------------------------------------------------------------------------------
