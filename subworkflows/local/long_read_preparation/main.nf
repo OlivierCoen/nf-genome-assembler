@@ -1,6 +1,7 @@
 include { PORECHOP_ABI                       } from '../../../modules/nf-core/porechop/abi'
 include { CHOPPER                            } from '../../../modules/nf-core/chopper'
 include { SEQKIT_SEQ                         } from '../../../modules/nf-core/seqkit/seq'
+include { SEQKIT_SANA                        } from '../../../modules/local/seqkit/sana'
 include { FASTQC as FASTQC_RAW               } from '../../../modules/local/fastqc'
 include { FASTQC as FASTQC_PREPARED_READS    } from '../../../modules/local/fastqc'
 include { NANOQ                              } from '../../../modules/local/nanoq'
@@ -30,13 +31,16 @@ workflow LONG_READ_PREPARATION {
 
     ch_versions = Channel.empty()
 
-    // the pipeline accepts reads in fasta format
+    // the pipeline accepts reads in fasta / fastq format
     ch_reads
         .filter {
             meta, reads ->
                 reads.name.endsWith('.fastq') || reads.name.endsWith('.fastq.gz') || reads.name.endsWith('.fq') || reads.name.endsWith('.fq.gz')
         }
         .set { ch_reads }
+
+    SEQKIT_SANA(ch_reads)
+    ch_reads = SEQKIT_SANA.out.fastq
 
     // ---------------------------------------------------------------------
     // Quality control on raw reads
@@ -53,7 +57,7 @@ workflow LONG_READ_PREPARATION {
     if ( !params.skip_long_reads_trimming ) {
 
         PORECHOP_ABI( ch_reads, [] )
-        PORECHOP_ABI.out.reads.set { ch_reads }
+        ch_reads    = PORECHOP_ABI.out.reads
         ch_versions = ch_versions.mix ( PORECHOP_ABI.out.versions )
 
     }
@@ -68,14 +72,14 @@ workflow LONG_READ_PREPARATION {
 
             CHOPPER( ch_reads, [] )
 
-            CHOPPER.out.fastq.set { ch_reads }
+            ch_reads    = CHOPPER.out.fastq
             ch_versions = ch_versions.mix ( CHOPPER.out.versions )
 
         } else { // seqkit seq
 
             SEQKIT_SEQ( ch_reads )
 
-            SEQKIT_SEQ.out.fastx.set { ch_reads }
+            ch_reads    = SEQKIT_SEQ.out.fastx
             ch_versions = ch_versions.mix ( SEQKIT_SEQ.out.versions )
 
         }
@@ -96,7 +100,6 @@ workflow LONG_READ_PREPARATION {
 
 
     emit:
-    prepared_reads = ch_reads
-    versions = ch_versions                     // channel: [ versions.yml ]
+    prepared_reads      = ch_reads
+    versions            = ch_versions                     // channel: [ versions.yml ]
 }
-
