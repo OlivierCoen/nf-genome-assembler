@@ -1,7 +1,7 @@
 include { PORECHOP_ABI                       } from '../../../modules/nf-core/porechop/abi'
 include { CHOPPER                            } from '../../../modules/nf-core/chopper'
 include { SEQKIT_SEQ                         } from '../../../modules/nf-core/seqkit/seq'
-include { SEQKIT_SANA                        } from '../../../modules/local/seqkit/sana'
+//include { SEQKIT_SANA                        } from '../../../modules/local/seqkit/sana'
 include { FASTQC as FASTQC_RAW               } from '../../../modules/local/fastqc'
 include { FASTQC as FASTQC_PREPARED_READS    } from '../../../modules/local/fastqc'
 include { NANOQ                              } from '../../../modules/local/nanoq'
@@ -39,8 +39,8 @@ workflow LONG_READ_PREPARATION {
         }
         .set { ch_reads }
 
-    SEQKIT_SANA(ch_reads)
-    ch_reads = SEQKIT_SANA.out.fastq
+    //SEQKIT_SANA(ch_reads)
+    //ch_reads = SEQKIT_SANA.out.fastq
 
     // ---------------------------------------------------------------------
     // Quality control on raw reads
