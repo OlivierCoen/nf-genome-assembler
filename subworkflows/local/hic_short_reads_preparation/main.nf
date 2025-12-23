@@ -30,8 +30,8 @@ workflow HIC_SHORT_READS_PREPARATION {
     if ( !params.skip_short_reads_cleaning ) {
 
         FASTP (
-            ch_hic_short_reads,
-            [], false, false, true
+            ch_hic_short_reads.map{ meta, files -> [ meta, files, [] ] },
+            false, false, false
         )
         ch_fastp_json = FASTP.out.json
         ch_versions = ch_versions.mix ( FASTP.out.versions )
