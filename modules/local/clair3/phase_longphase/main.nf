@@ -3,7 +3,7 @@ process CLAIR3_PHASE_LONGPHASE {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         '':
         'community.wave.seqera.io/library/clair3_longphase_whatshap:0babba43adcef067' }"
 

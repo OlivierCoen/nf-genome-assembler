@@ -5,7 +5,7 @@ process PECAT_POLISH {
     label "process_high"
 
     conda "${projectDir}/deployment/pecat/pecat_medaka/spec-file.txt"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'ocoen/pecat_medaka:0.0.3-v1.7.2' :
         'ocoen/pecat_medaka:0.0.3-v1.7.2' }"
 

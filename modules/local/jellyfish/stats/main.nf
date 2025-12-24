@@ -1,7 +1,7 @@
 process STATS {
     tag "${meta.id}"
     label 'process_medium'
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container
         ? 'https://depot.galaxyproject.org/singularity/kmer-jellyfish:2.3.1--h4ac6f70_0'
         : 'biocontainers/kmer-jellyfish:2.3.1--h4ac6f70_0'}"
 

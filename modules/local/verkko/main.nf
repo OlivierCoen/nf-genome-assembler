@@ -5,7 +5,7 @@ process VERKKO {
     label 'process_long'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/b9/b93232aa841f628343f5fc073eea96dcd897b83c3f76c46f8da73d2f07a48e5e/data':
         'community.wave.seqera.io/library/verkko:2.2.1--fb7344de848f21eb' }"
 

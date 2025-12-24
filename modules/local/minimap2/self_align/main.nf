@@ -3,7 +3,7 @@ process MINIMAP2_SELF_ALIGNMENT {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d6/d6b2df22c4ad4b0be8d2ec398104559880f9234ebefe1b37bd86ba22e0d788f3/data':
         'community.wave.seqera.io/library/minimap2:2.29--dde575a222b05b03' }"
 

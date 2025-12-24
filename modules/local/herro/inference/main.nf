@@ -3,7 +3,7 @@ process HERRO_INFERENCE {
     label 'process_high'
 
     //conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'ocoen/herro:0.0.2':
         'ocoen/herro:0.0.2' }"
 

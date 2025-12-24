@@ -9,7 +9,7 @@ process MEDAKA_INFERENCE {
 
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/1c/1cef7e8a1007b53c6364a8cf61940b0865765479eadd94ff5956ed7711016b8e/data' :
         'community.wave.seqera.io/library/medaka:2.1.0--c9b2fb4c891009f4' }"
 

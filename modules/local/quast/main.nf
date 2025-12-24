@@ -3,7 +3,7 @@ process QUAST {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/24/245c56c9733954bbf2675e19b922d63772731d7bc7ebe6964b8119fb6a9a3a12/data' :
         'community.wave.seqera.io/library/quast_pandas:45a80fbbe1a6f7b8' }"
 

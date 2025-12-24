@@ -3,7 +3,7 @@ process TGSGAPCLOSER {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/55/5585ff2ad6b14c115ea9effbb33bf2222a7ca74f9790df42f8f10e957e83ce57/data' :
         'community.wave.seqera.io/library/tgsgapcloser_pigz:bcfeaafc4b4aa363'}"
 

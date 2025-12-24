@@ -5,7 +5,7 @@ process PRETEXTSNAPSHOT {
     errorStrategy = 'ignore'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d4/d45a21691a46e7c4cb441377774522fb1b093631e4ca973daa0020ff5893d953/data':
         'community.wave.seqera.io/library/pretextsnapshot_samtools:4647aca739f78355' }"
 

@@ -5,7 +5,7 @@ process PECAT_PHASE {
     label "process_high"
 
     conda "${projectDir}/deployment/pecat/pecat_clair3/spec-file.txt"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'ocoen/pecat_clair3:0.0.3-v1.1.1' :
         'ocoen/pecat_clair3:0.0.3-v1.1.1' }"
 

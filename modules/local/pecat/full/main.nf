@@ -3,7 +3,7 @@ process PECAT_FULL {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/23/231c2aa4eeee044916f6093599b721b0f8ab01144062685a5d6fe784a865a25f/data' :
         'community.wave.seqera.io/library/pecat:0.0.3--a2e6fcecffb03038'}"
 

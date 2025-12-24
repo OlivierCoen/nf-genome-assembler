@@ -5,7 +5,7 @@ process PECAT_SECOND_ASSEMBLY {
     label "process_high"
 
     conda "${projectDir}/deployment/pecat/pecat/spec-file.txt"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'ocoen/pecat:0.0.3' :
         'ocoen/pecat:0.0.3' }"
 

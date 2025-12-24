@@ -3,7 +3,7 @@ process PURGEDUPS_CALCUTS {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/purge_dups:1.2.6--h7132678_0':
         'biocontainers/purge_dups:1.2.6--h7132678_0' }"
 

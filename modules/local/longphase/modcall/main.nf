@@ -3,7 +3,7 @@ process LONGPHASE_MODCALL {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/ca/ca1f81515569358b58ef065db1705b7393d734adeb4c5c4a5cd99cde65ea1c99/data':
         'community.wave.seqera.io/library/longphase:1.7.3--67cdda0a69288158' }"
 

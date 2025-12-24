@@ -3,7 +3,7 @@ process CHOPPER {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/cf/cff7c36d13383fe68e1ea683dd3cb3ef885f4b579895f6d5a67646b4321af132/data':
         'community.wave.seqera.io/library/chopper_pigz:5c818cb80ca6c787' }"
 

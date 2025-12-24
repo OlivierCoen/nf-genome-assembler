@@ -3,7 +3,7 @@ process GENOMESCOPE {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/genomescope2:2.0--py311r42hdfd78af_6':
         'biocontainers/genomescope2:2.0--py311r42hdfd78af_6' }"
 

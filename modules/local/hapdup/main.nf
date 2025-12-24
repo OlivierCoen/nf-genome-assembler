@@ -2,7 +2,7 @@ process HAPDUP {
     tag "$meta.id"
     label 'process_medium'
 
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'mkolmogo/hapdup:0.12':
         'mkolmogo/hapdup:0.12' }"
 

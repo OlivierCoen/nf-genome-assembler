@@ -6,7 +6,7 @@ process DENTIST {
 
     //container "quay.io/ocoen/dentist:4.0.0"
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/ca/cae3ab57e8f3ffee7165068ad77b0814b210743767eff3d02db323fe528a4843/data' :
         'community.wave.seqera.io/library/dentist-core_snakemake:dada80c0e4030069' }"
 

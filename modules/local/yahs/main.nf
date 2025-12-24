@@ -3,7 +3,7 @@ process YAHS {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/e9/e9c62e34fc2b2a7a482d894cc201be6c447d7c90047dc0fd3c6210d6893cd968/data':
         'community.wave.seqera.io/library/yahs_pigz:0ea95483ff8bc79e' }"
 

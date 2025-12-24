@@ -3,7 +3,7 @@ process CONTIG_STATS {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/8a/8a1927073c1364f8532fb5461146678c70aeffe35f390de2c632e25decaa4841/data' :
         'community.wave.seqera.io/library/biopython_pandas:ebd73ca158d78599' }"
 

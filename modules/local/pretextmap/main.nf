@@ -3,7 +3,7 @@ process PRETEXTMAP {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a5/a586fe0189c4e48c4b3f5a7dcfb6308b1fa7cfddcd6db71f758a22e608f3a54c/data':
         'community.wave.seqera.io/library/pretextmap_samtools:fe518f32a75cf4dd' }"
 

@@ -3,7 +3,7 @@ process NANOQ {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/ee/ee6ebe971333aefe89709b6b37e62a799181be296625e4a17fa21be55a11f827/data' :
         'community.wave.seqera.io/library/nanoq_pandas:19335bf5baeeeb9c'}"
 

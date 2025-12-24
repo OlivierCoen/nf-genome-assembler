@@ -3,7 +3,7 @@ process WINNOWMAP {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/8e/8e2bc2e2145ff6ea009e5862234630bbc98128146bbe31b040467ef0ad5a4721/data':
         'community.wave.seqera.io/library/samtools_winnowmap:fde47544606aaf19' }"
 

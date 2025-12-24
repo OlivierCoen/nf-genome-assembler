@@ -5,7 +5,7 @@ process HIFIASM {
     label 'process_long'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/hifiasm:0.25.0--h5ca1c30_0' :
         'biocontainers/hifiasm:0.25.0--h5ca1c30_0' }"
 

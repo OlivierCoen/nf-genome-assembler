@@ -3,7 +3,7 @@ process SAMTOOLS_FAIDX {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/76/76e8e7baacbb86bca8f27e669a29a191b533bc1c5d7b08813cac7c20fcff174b/data' :
         'community.wave.seqera.io/library/samtools:1.21--0d76da7c3cf7751c' }"
 

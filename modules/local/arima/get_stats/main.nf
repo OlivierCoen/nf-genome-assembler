@@ -3,7 +3,7 @@ process ARIMA_GET_STATS {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/70/707f35e66afc6996ac26db12501a2444e8024f08726a66195cc8f53fbf601a7a/data':
         'community.wave.seqera.io/library/perl:5.32.1--a61125adac4a9f65' }"
 
