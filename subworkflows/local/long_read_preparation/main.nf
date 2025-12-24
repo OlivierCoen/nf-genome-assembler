@@ -1,5 +1,5 @@
 include { PORECHOP_ABI                       } from '../../../modules/nf-core/porechop/abi'
-include { CHOPPER                            } from '../../../modules/nf-core/chopper'
+include { CHOPPER                            } from '../../../modules/local/chopper'
 include { SEQKIT_SEQ                         } from '../../../modules/nf-core/seqkit/seq'
 //include { SEQKIT_SANA                        } from '../../../modules/local/seqkit/sana'
 include { FASTQC as FASTQC_RAW               } from '../../../modules/local/fastqc'
@@ -63,9 +63,7 @@ workflow LONG_READ_PREPARATION {
         if ( params.filtering_tool == "chopper" ) {
 
             CHOPPER( ch_reads, [] )
-
             ch_reads    = CHOPPER.out.fastq
-            ch_versions = ch_versions.mix ( CHOPPER.out.versions )
 
         } else { // seqkit seq
 
