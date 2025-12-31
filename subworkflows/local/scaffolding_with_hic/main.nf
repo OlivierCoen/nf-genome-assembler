@@ -45,9 +45,11 @@ workflow SCAFFOLDING_WITH_HIC {
     // ------------------------------------------------------------------------------------
 
     if ( !params.skip_hic_contact_maps ) {
+        def export_to_multiqc = false
         HIC_CONTACT_MAP (
             ch_hic_bam,
-            ch_assemblies
+            ch_assemblies,
+            export_to_multiqc
         )
     }
 
@@ -76,4 +78,3 @@ workflow SCAFFOLDING_WITH_HIC {
     scaffolded_assemblies          = ch_scaffolded_assemblies
     versions                          = ch_versions                     // channel: [ versions.yml ]
 }
-

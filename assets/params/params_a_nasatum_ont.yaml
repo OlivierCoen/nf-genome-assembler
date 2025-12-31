@@ -1,8 +1,0 @@
-# Assembly
-assembler: pecat
-pecat_config_file: assets/pecat_configs/pecat_default_config.txt
-
-# Trimming / Filtering
-porechop_abi_args: --ab_initio
-chopper_args: --quality 10 --minlength 1000
-

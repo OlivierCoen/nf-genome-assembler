@@ -1,5 +1,5 @@
 process PRETEXTMAP {
-    tag "${fasta.baseName}"
+    tag "${meta.id}"
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
@@ -15,12 +15,9 @@ process PRETEXTMAP {
     tuple val("${task.process}"), val('pretextmap'), eval("PretextMap | sed '/Version/!d; s/.*Version //'"), topic: versions
     tuple val("${task.process}"), val('samtools'), eval("samtools --version | sed '1!d; s/samtools //'"),    topic: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def args        = task.ext.args     ?: ''
-    def prefix      = task.ext.prefix   ?: "${fasta.baseName}"
+    def prefix      = task.ext.prefix   ?: "${fasta.baseName.tokenize(".")[0..-2].join('.')}"
     """
     samtools \\
         view \\

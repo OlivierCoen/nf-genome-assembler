@@ -1,6 +1,6 @@
 process PRETEXTSNAPSHOT {
     tag "${pretext_map.baseName}"
-    label 'process_medium'
+    label 'process_single'
 
     errorStrategy = 'ignore'
 
@@ -11,18 +11,17 @@ process PRETEXTSNAPSHOT {
 
     input:
     tuple val(meta), path(pretext_map)
+    val export_to_multiqc
 
     output:
-    tuple val(meta), path('*.{jpeg,png,bmp}'),                                                                                                      emit: image
+    tuple val(meta), path('*.FullMap.{jpeg,png,bmp}'),                                                                                              emit: image
+    path('*.pretextsnapshot.{jpeg,png,bmp}'), optional: true,                                                                                       topic: mqc_pretextsnapshot
     tuple val("${task.process}"), val('pretextsnapshot'), eval("echo \$(PretextSnapshot --version 2>&1) | sed 's/^.*PretextSnapshot Version //'"),  topic: versions
     tuple val("${task.process}"), val('samtools'), eval("samtools --version | sed '1!d; s/samtools //'"),                                           topic: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${pretext_map.baseName}"
+    def prefix = task.ext.prefix ?: "${pretext_map.baseName}."
     """
     PretextSnapshot \\
         $args \\
@@ -30,10 +29,14 @@ process PRETEXTSNAPSHOT {
         --prefix $prefix \\
         --sequences "=full" \\
         --folder .
+
+    if [[ $export_to_multiqc == true ]]; then
+        cp ${prefix}FullMap.png ${prefix}pretextsnapshot.png
+    fi
     """
     stub:
     def prefix = task.ext.prefix ?: "${pretext_map.baseName}"
     """
-    touch ${prefix}.png
+    touch ${prefix}.FullMap.png
     """
 }

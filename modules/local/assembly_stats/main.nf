@@ -11,24 +11,17 @@ process ASSEMBLY_STATS {
     tuple val(meta), path(fasta)
 
     output:
-    path("*.stats.json"),                                                                                                   emit: stats
-    path("*.stats.json"),                                                                                                   topic: mqc_assembly_stats
+    path("*.nx_assembly_stats.csv"),                                                                                        topic: mqc_nx_assembly_stats
+    path("*.lx_assembly_stats.csv"),                                                                                        topic: mqc_lx_assembly_stats
     tuple val("${task.process}"), val('python'),       eval("python3 --version | sed 's/Python //'"),                       topic: versions
     tuple val("${task.process}"), val('biopython'),    eval('python3 -c "import Bio; print(Bio.__version__)"'),             topic: versions
 
     script:
-    def prefix        = task.ext.prefix ?: "${fasta.baseName}"
+    def prefix        = task.ext.prefix ?: "${fasta.baseName}.assembly_stats"
     """
     zcat -k $fasta > "${fasta.baseName}"
 
     get_assembly_stats.py \\
-        --fasta ${fasta.baseName} \\
-        --out ${prefix}.stats.json
-    """
-
-    stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    """
-    touch ${prefix}.stats.json
+        --fasta ${fasta.baseName}
     """
 }

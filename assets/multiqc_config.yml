@@ -3,7 +3,6 @@ report_comment: >
   analysis pipeline.
 
 report_section_order:
-
   quast_summary:
     order: 1300
   busco_summary:
@@ -31,7 +30,6 @@ report_section_order:
 
 run_modules:
   - busco
-  - quast
   - custom_content
   - fastqc
 
@@ -49,15 +47,15 @@ module_order:
       path_filters:
         - "*_prepared_fastqc.zip"
 
-
 export_plots: true
 
 disable_version_detection: true
 
 skip_generalstats: true
 
-custom_data:
+ignore_images: false
 
+custom_data:
   busco_summary:
     section_name: "BUSCO summary"
     file_format: "tsv"
@@ -71,20 +69,14 @@ custom_data:
     file_format: "tsv"
     #sort_rows: false
     description: |
-      Nanoq report
+      Summary of statistics computed by NanoQ.
     plot_type: "table"
 
-  contig_size_distributions:
-    section_name: "Contig size distributions"
-    file_format: "tsv"
-    description: |
-      Nanoq report
-    plot_type: "linegraph"
-    pconfig:
-      categories: true
-
   merqury_assembly_qv:
-    section_name: "Merqury Assembly Quality Value"
+    section_name: "Assembly Quality Value"
+    parent_id: merqury
+    parent_name: "Merqury"
+    parent_description: "Merqury QC statistics"
     file_format: "tsv"
     description: |
       Assembly Quality Value as computed by Merqury. The higher the value, the better the quality of the assembly.
@@ -104,7 +96,10 @@ custom_data:
         format: "{:,e}"
 
   merqury_contigs_qv:
-    section_name: "Merqury Contig Quality Value"
+    section_name: "Contig Quality Value"
+    parent_id: merqury
+    parent_name: "Merqury"
+    parent_description: "Merqury QC statistics"
     file_format: "tsv"
     sort_rows: false
     description: |
@@ -130,24 +125,56 @@ custom_data:
     section_name: "Quast summary"
     file_format: "tsv"
     description: |
-      Quast summary
+      Summary of statistics computed by QUAST.
     plot_type: "table"
 
+  nx_assembly_stats:
+    section_name: "Nx "
+    parent_id: scaffold_statistics
+    parent_name: "Scaffold Statistics"
+    parent_description: "Nx and Lx statistics computed on scaffoled contigs"
+    file_format: "csv"
+    plot_type: "linegraph"
+    description: |
+      Nx Assembly Statistics
+    pconfig:
+      title: "Nx values (N0 -> N100)"
+      ylab: "Scaffold size"
+      xlab: "Nx"
+
+  lx_assembly_stats:
+    section_name: "Lx Assembly Statistics"
+    parent_id: scaffold_statistics
+    parent_name: "Scaffold Statistics"
+    parent_description: "Nx and Lx statistics computed on scaffoled contigs"
+    file_format: "csv"
+    plot_type: "linegraph"
+    description: |
+      Lx Assembly Statistics
+    pconfig:
+      title: "Lx values (L0 -> L100)"
+      ylab: "Nb scaffolds"
+      xlab: "Lx"
+
+  hic_contact_maps:
+    section_name: "Final Hi-C Contact Map"
+    description: |
+      Hi-C Contact Map obtained after scaffolding
 
 sp:
   busco_summary:
     fn: "*-busco.batch_summary.txt"
   nanoq_report:
     fn: "*_nanoq_summary.tsv"
-  contig_size_distributions:
-    fn: "*_contig_sizes.tsv"
   merqury_assembly_qv:
     fn: "*_qv_assembly.tsv"
   merqury_contigs_qv:
     fn: "*_qv_contigs.tsv"
   quast_summary:
     fn: "*_quast_report.tsv"
-
-
-
-
+  nx_assembly_stats:
+    fn: "*.nx_assembly_stats.csv"
+  lx_assembly_stats:
+    fn: "*.lx_assembly_stats.csv"
+  hic_contact_maps:
+    fn: "*.pretextsnapshot.png"

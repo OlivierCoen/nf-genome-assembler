@@ -7,16 +7,17 @@ workflow HIC_CONTACT_MAP {
     take:
     ch_hic_bam // channel containing alignments of HI-C reads mapped to genome, as produced by the Arima mapping pipeline
     ch_assemblies
+    export_to_multiqc
 
     main:
 
-    ch_hic_bam
-        .join( ch_assemblies )
-        .set { pretextmap_input }
+    PRETEXTMAP (
+        ch_hic_bam.join( ch_assemblies )
+    )
 
-    PRETEXTMAP ( pretextmap_input )
-
-    PRETEXTSNAPSHOT ( PRETEXTMAP.out.pretext )
+    PRETEXTSNAPSHOT (
+        PRETEXTMAP.out.pretext,
+        export_to_multiqc
+    )
 
 }
-

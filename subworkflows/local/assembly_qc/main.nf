@@ -105,9 +105,11 @@ workflow ASSEMBLY_QC {
             ch_assemblies
         )
 
+        def export_to_multiqc = true
         HIC_CONTACT_MAP (
             ARIMA_MAPPING_PIPELINE_HIC.out.alignment,
-            ch_assemblies
+            ch_assemblies,
+            export_to_multiqc
         )
     }
 

@@ -66,13 +66,15 @@ workflow MULTIQC_WORKFLOW {
     ch_multiqc_files
         .mix( Channel.topic('mqc_busco_batch_summary') )
         .mix( Channel.topic('mqc_busco_short_summaries_txt') )
-        .mix( Channel.topic('mqc_assembly_stats') )
+        .mix( Channel.topic('mqc_nx_assembly_stats') )
+        .mix( Channel.topic('mqc_lx_assembly_stats') )
         .mix( Channel.topic('mqc_fastqc_zip') )
         .mix( Channel.topic('mqc_flye_report') )
         .mix( Channel.topic('mqc_assembly_qv') )
         .mix( Channel.topic('mqc_contigs_qv') )
         .mix( Channel.topic('mqc_nanoq_report') )
         .mix( Channel.topic('mqc_quast_report') )
+        .mix( Channel.topic('mqc_pretextsnapshot') )
         .set { ch_multiqc_files }
 
     MULTIQC (
@@ -88,4 +90,3 @@ workflow MULTIQC_WORKFLOW {
     emit:
     multiqc_report = MULTIQC.out.report
 }
-
