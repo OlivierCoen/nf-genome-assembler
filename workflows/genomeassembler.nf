@@ -119,7 +119,7 @@ workflow GENOMEASSEMBLER {
     // Hi-C SHORT READ PREPARATION
     // --------------------------------------------------------
 
-     if ( !params.skip_draft_assembly_purging ) {
+     if ( !params.skip_short_read_preparation ) {
 
         HIC_SHORT_READS_PREPARATION ( ch_hic_reads )
         HIC_SHORT_READS_PREPARATION.out.prepared_hic_short_reads.set { ch_hic_reads }
