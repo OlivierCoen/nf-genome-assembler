@@ -12,8 +12,7 @@ process QUAST {
 
 
     output:
-    path("${meta.id}*/*"),                                                                                                  emit: results
-
+    path("**"),                                                                                                             emit: results
     path("*_quast_report.tsv"),                                                                                             topic: mqc_quast_report
     tuple val("${task.process}"), val('python'),       eval("python3 --version | sed 's/Python //'"),                       topic: versions
     tuple val("${task.process}"), val('pandas'),       eval('python3 -c "import pandas; print(pandas.__version__)"'),       topic: versions
