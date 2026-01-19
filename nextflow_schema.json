@@ -174,13 +174,6 @@
                     "enum": ["hifiasm", "flye"],
                     "default": "flye"
                 },
-                "nb_racon_rounds": {
-                    "type": "number",
-                    "default": 1,
-                    "description": "Number of Racon polishing rounds before polishing with Medaka",
-                    "minimum": 0,
-                    "maximum": 5
-                },
                 "skip_medaka": {
                     "type": "boolean",
                     "description": "Skip polishing with Medaka",
