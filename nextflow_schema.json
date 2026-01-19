@@ -78,12 +78,12 @@
                     "description": "Skip long read preparation",
                     "fa_icon": "fas fa-hand-scissors"
                 },
-                 "skip_long_reads_fastqc_raw": {
+                "skip_long_reads_fastqc_raw": {
                     "type": "boolean",
                     "description": "Skip FastQC before long read preparation",
                     "fa_icon": "fas fa-hand-scissors"
                 },
-                 "skip_long_reads_trimming": {
+                "skip_long_reads_trimming": {
                     "type": "boolean",
                     "description": "Skip trimming during long read preparation",
                     "fa_icon": "fas fa-hand-scissors"
@@ -128,7 +128,7 @@
                     "description": "Skip FastQC before short read preparation",
                     "fa_icon": "fas fa-hand-scissors"
                 },
-                 "skip_short_reads_cleaning": {
+                "skip_short_reads_cleaning": {
                     "type": "boolean",
                     "description": "Skip cleaning (trimming and filtering ) during short read preparation",
                     "fa_icon": "fas fa-hand-scissors"
@@ -211,7 +211,16 @@
                 "clair3_model": {
                     "type": "string",
                     "description": "Model to use for Clair3 phasing",
-                    "enum": ["ont_guppy5", "ont", "hifi", "hifi_revio", "r1041_e82_400bps_sup_v410", "r1041_e82_400bps_sup_v500", "r941_prom_hac_g360+g422", "r941_prom_sup_g5014"],
+                    "enum": [
+                        "ont_guppy5",
+                        "ont",
+                        "hifi",
+                        "hifi_revio",
+                        "r1041_e82_400bps_sup_v410",
+                        "r1041_e82_400bps_sup_v500",
+                        "r941_prom_hac_g360+g422",
+                        "r941_prom_sup_g5014"
+                    ],
                     "default": "ont_guppy5",
                     "fa_icon": "fas fa-forward"
                 },
@@ -272,13 +281,6 @@
                 "skip_gap_closing": {
                     "type": "boolean",
                     "description": "Skip the step consisting in closing gaps in the final assembly",
-                    "fa_icon": "fas fa-hand-scissors"
-                },
-                "gap_closer": {
-                    "type": "string",
-                    "description": "Tool to use for gap closing",
-                    "enum": ["ntlink", "tgsgapcloser", "samba"],
-                    "default": "ntlink",
                     "fa_icon": "fas fa-hand-scissors"
                 }
             }
