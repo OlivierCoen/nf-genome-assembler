@@ -1,5 +1,6 @@
 include { NTLINK_GAP_FILL                       } from '../../../modules/local/ntlink/gap_fill'
 
+include { POLISH                                } from '../subworkflows/polish'
 
 workflow CLOSE_GAPS {
 
@@ -14,10 +15,14 @@ workflow CLOSE_GAPS {
     NTLINK_GAP_FILL (
         ch_assemblies.join ( ch_long_reads )
     )
-    NTLINK_GAP_FILL.out.fasta.set { ch_gapclosed_assemblies }
+
+    POLISH (
+        ch_long_reads,
+        NTLINK_GAP_FILL.out.fasta
+    )
 
 
     emit:
-    gapclosed_assemblies       = ch_gapclosed_assemblies
+    gapclosed_assemblies       = POLISH.out.assemblies
     versions                   = ch_versions                     // channel: [ versions.yml ]
 }
