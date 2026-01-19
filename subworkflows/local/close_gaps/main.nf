@@ -1,6 +1,6 @@
 include { NTLINK_GAP_FILL                       } from '../../../modules/local/ntlink/gap_fill'
 
-include { POLISH                                } from '../subworkflows/polish'
+include { POLISH                                } from '../polish'
 
 workflow CLOSE_GAPS {
 
