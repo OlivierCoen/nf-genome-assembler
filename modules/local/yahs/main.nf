@@ -37,11 +37,4 @@ process YAHS {
     pigz ${prefix}_scaffolds_final.fa
     mv ${prefix}_scaffolds_final.fa.gz ${prefix}_scaffolded.fa.gz
     """
-
-    stub:
-    """
-    touch ${prefix}_scaffolded.fa.gz
-    touch ${prefix}_scaffolds_final.agp
-    touch ${prefix}.bin
-    """
 }

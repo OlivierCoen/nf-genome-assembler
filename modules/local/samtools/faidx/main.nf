@@ -24,16 +24,4 @@ process SAMTOOLS_FAIDX {
         $args
 
     """
-
-    stub:
-    def match = (task.ext.args =~ /-o(?:utput)?\s(.*)\s?/).findAll()
-    def fastacmd = match[0] ? "touch ${match[0][1]}" : ''
-    def get_sizes_command = get_sizes ? "touch ${fasta}.sizes" : ''
-    """
-    ${fastacmd}
-    touch ${fasta}.fai
-    if [[ "${fasta.extension}" == "gz" ]]; then
-        touch ${fasta}.gzi
-    fi
-    """
 }

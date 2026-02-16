@@ -22,15 +22,10 @@ workflow ARIMA_MAPPING_PIPELINE_HIC {
     // SEPARATING HIC READS 1 AND 2
     // ------------------------------------------------------------------------------------
 
-    ch_hic_reads = ch_hic_read_pairs
-                        .multiMap { meta, reads ->
-                            r1: [ meta, reads[0] ]
-                            r2: [ meta, reads[1] ]
-                        }
+    ch_hic_reads_1 = ch_hic_read_pairs.map{ meta, reads -> [ meta, reads[0] ]}
+    ch_hic_reads_2 = ch_hic_read_pairs.map{ meta, reads -> [ meta, reads[1] ]}
 
-    ch_hic_reads = ch_hic_reads.r1
-                    .mix( ch_hic_reads.r2 )
-        .
+    ch_hic_reads = ch_hic_reads_1.mix( ch_hic_reads_2 )
 
     // ------------------------------------------------------------------------------------
     // MAPPING EACH READ FILE TO GENOME

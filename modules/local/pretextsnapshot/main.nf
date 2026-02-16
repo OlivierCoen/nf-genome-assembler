@@ -2,7 +2,7 @@ process PRETEXTSNAPSHOT {
     tag "${pretext_map.baseName}"
     label 'process_single'
 
-    errorStrategy = 'ignore'
+    errorStrategy 'ignore'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['apptainer', 'singularity'] && !task.ext.singularity_pull_docker_container ?

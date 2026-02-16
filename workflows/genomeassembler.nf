@@ -13,7 +13,7 @@ include { SCAFFOLDING_WITH_HIC                                               } f
 include { PURGE_DUPLICATES as SCAFFOLDED_ASSEMBLY_PURGING                    } from '../subworkflows/local/purge_duplicates'
 include { CLOSE_GAPS                                                         } from '../subworkflows/local/close_gaps'
 include { ASSEMBLY_QC                                                        } from '../subworkflows/local/assembly_qc'
-include { MULTIQC_WORKFLOW                                                   } from '../subworkflows/local/multiqc'
+include { REPORTING                                                          } from '../subworkflows/local/reporting'
 
 
 /*
@@ -180,10 +180,16 @@ workflow GENOMEASSEMBLER {
     // MULTIQC
     // ------------------------------------------------------------------------------------
 
-    MULTIQC_WORKFLOW ( ch_versions )
+    REPORTING (
+        ch_versions,
+        params.multiqc_config,
+        params.multiqc_logo,
+        params.multiqc_methods_description,
+        params.outdir
+    )
 
     emit:
-    multiqc_report = MULTIQC_WORKFLOW.out.multiqc_report.toList()
+    multiqc_report = REPORTING.out.multiqc_report.toList()
 
 
 }

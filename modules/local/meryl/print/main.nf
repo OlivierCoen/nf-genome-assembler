@@ -23,12 +23,4 @@ process MERYL_PRINT {
         $meryl_db \\
         > ${prefix}.repetitive_kmers.txt
     """
-
-    stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    """
-    for READ in ${reads}; do
-        touch ${prefix}.\${READ%.f*}.meryl
-    done
-    """
 }

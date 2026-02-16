@@ -15,9 +15,6 @@ process NTLINK_GAP_FILL {
     tuple val("${task.process}"), val('ntlink'), eval("ntLink 2>&1 | grep -oP 'v\\d+\\.\\d+\\.\\d+'"), topic: versions
     tuple val("${task.process}"), val('pigz'),   eval('pigz --version | sed "s/pigz //g"'),            topic: versions
 
-    when:
-    task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
     def prefix = fasta.name.replaceFirst(/\.[^.]+\.gz$/, "") // everything before (fa/fasta/...).gz
@@ -32,10 +29,5 @@ process NTLINK_GAP_FILL {
 
     mv "\$( readlink -f \$(find . -name *.ntLink.scaffolds.fa ) )" ${prefix}.gap_filled.fa
     pigz -n ${prefix}.gap_filled.fa
-    """
-
-    stub:
-    """
-    touch ${prefix}.gap_filled.fa.gz
     """
 }

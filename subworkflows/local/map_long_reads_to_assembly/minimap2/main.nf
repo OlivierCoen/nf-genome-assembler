@@ -17,7 +17,7 @@ workflow MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2 {
     // ---------------------------------------------------
 
     MINIMAP2_ALIGN(
-        ch_reads.combine( ch_genome_assembly, by: [0] )  // cartesian product with meta as matching key,
+        ch_reads.combine( ch_genome_assembly, by: [0] ),  // cartesian product with meta as matching key,
         bam_format
     )
 

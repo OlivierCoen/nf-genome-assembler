@@ -1,9 +1,9 @@
 def getQScoreCategory ( qual ) {
 
-    mean_quality = qual.toFloat()
+    def mean_quality = qual.toFloat()
     // TODO: this is only true for ONT. Differentiate according to plastform
     if ( mean_quality < 7 ) {
-        warning "Very low quality reads: $mean_quality"
+        log.warn("Very low quality reads: $mean_quality")
         return "raw"
     } else if ( mean_quality >= 7 && mean_quality < 15 ) {
         return "raw"

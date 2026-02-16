@@ -9,17 +9,15 @@ process ARIMA_GET_STATS {
 
     input:
     tuple val(meta), path(bam)
-    tuple val(meta), path(index)
+    tuple val(meta2), path(index)
 
     output:
-    tuple val(meta), path("*.stats"),                              emit: stats
-    tuple val("${task.process}"), val('perl'), val('5.32.1'),      topic: versions
+    tuple val(meta), path("*.stats"),                         emit: stats
+    tuple val("${task.process}"), val('perl'), val('5.32.1'), topic: versions
 
     script:
-
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     get_stats.pl $bam > ${bam}.stats
-
     """
 }
