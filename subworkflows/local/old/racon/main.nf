@@ -11,7 +11,7 @@ workflow RACON_WORKFLOW {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ---------------------------------------------------
     // Alignment to respective assembly
@@ -44,4 +44,3 @@ workflow RACON_WORKFLOW {
     assemblies = RACON.out.improved_assembly
     versions = ch_versions                     // channel: [ versions.yml ]
 }
-

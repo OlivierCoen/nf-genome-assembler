@@ -9,15 +9,11 @@ workflow HIFIASM_WORKFLOW {
 
     main:
 
-    draft_assembly_versions = Channel.empty()
+    draft_assembly_versions = channel.empty()
 
     // TODO: parse Nanoq output to distinguish between long and ultra long reads
-    ch_reads
-        .map { meta, reads -> [ meta, reads, [] ] }
-        .set { hifiasm_inputs }
-
     HIFIASM(
-        hifiasm_inputs,
+        ch_reads.map { meta, reads -> [ meta, reads, [] ] },
         params.assembly_mode
     )
 
@@ -35,7 +31,7 @@ workflow HIFIASM_WORKFLOW {
         .set { gfa_assemblies }
     */
 
-    HIFIASM.out.primary_contigs.set { gfa_assemblies }
+    gfa_assemblies = HIFIASM.out.primary_contigs
 
     GFATOOLS_GFA2FA( gfa_assemblies )
 
@@ -52,8 +48,7 @@ workflow HIFIASM_WORKFLOW {
         .set { assemblies }
     */
 
-    GFATOOLS_GFA2FA.out.fasta
-        .set { assemblies }
+    assemblies = GFATOOLS_GFA2FA.out.fasta
 
     emit:
     assemblies

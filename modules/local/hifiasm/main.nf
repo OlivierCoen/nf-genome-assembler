@@ -46,12 +46,12 @@ process HIFIASM {
 
     // Note: "Hifiasm purges haplotig duplications by default.
     // For inbred or homozygous genomes, you may disable purging with option -l0"
-    def haplotig_purging_args = assembly_mode == "haplotype" ? "-l0": ""
+    def purge_duplicates_args = assembly_mode == "haplotype" ? "-l0": ""
     """
     hifiasm \\
         $args \\
         $ont_arg \\
-        $haplotig_purging_args \\
+        $purge_duplicates_args \\
         -t ${task.cpus} \\
         ${ultralong} \\
         -o ${prefix} \\

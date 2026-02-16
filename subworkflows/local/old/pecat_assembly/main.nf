@@ -12,7 +12,7 @@ workflow PECAT_ASSEMBLY {
 
     main:
 
-    ch_pecat_config_file = Channel.fromPath ( params.pecat_config_file, checkIfExists: true )
+    ch_pecat_config_file = channel.fromPath ( params.pecat_config_file, checkIfExists: true )
     PECAT_SPLIT_CONFIGS ( ch_pecat_config_file )
 
     // --------------------------------------------------------
@@ -80,4 +80,3 @@ workflow PECAT_ASSEMBLY {
     rest_second_assembly = PECAT_POLISH.out.rest_second_assembly
 
 }
-

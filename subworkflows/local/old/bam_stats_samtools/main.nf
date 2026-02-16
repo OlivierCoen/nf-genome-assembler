@@ -11,7 +11,7 @@ workflow BAM_STATS_SAMTOOLS {
     ch_bam_ref_bai // channel: [ val(meta), path(bam), path(ref), path(bai) ]
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     ch_bam_ref_bai
         .map { meta, bam, ref, bai -> [ meta, bam, bai, ref ]} // inverting order

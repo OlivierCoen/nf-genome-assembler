@@ -67,7 +67,7 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    Channel
+    channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .set { ch_samplesheet }
 
@@ -220,4 +220,3 @@ def formatVersionsToYAML( ch_versions ) {
                     "${processName}:\n${toolVersions}\n"
             }
 }
-

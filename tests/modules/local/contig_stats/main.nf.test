@@ -10,7 +10,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] =  Channel.of(
+                input[0] =  channel.of(
                     [
                         [ id: "test" ],
                         file( '$projectDir/tests/test_data/contig_stats/*.fasta', checkIfExists: true)

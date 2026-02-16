@@ -10,8 +10,8 @@ workflow HIC_SHORT_READS_PREPARATION {
 
     main:
 
-    ch_versions = Channel.empty()
-    ch_fastp_json = Channel.empty()
+    ch_versions = channel.empty()
+    ch_fastp_json = channel.empty()
 
     // ---------------------------------------------------------------------
     // Quality control on raw reads
@@ -33,10 +33,9 @@ workflow HIC_SHORT_READS_PREPARATION {
             ch_hic_short_reads.map{ meta, files -> [ meta, files, [] ] },
             false, false, false
         )
-        ch_fastp_json = FASTP.out.json
-        ch_versions = ch_versions.mix ( FASTP.out.versions )
-
-        FASTP.out.reads.set { ch_hic_short_reads }
+        ch_fastp_json      = FASTP.out.json
+        ch_versions        = ch_versions.mix ( FASTP.out.versions )
+        ch_hic_short_reads = FASTP.out.reads
     }
 
     // ---------------------------------------------------------------------

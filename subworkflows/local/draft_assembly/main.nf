@@ -17,26 +17,24 @@ workflow DRAFT_ASSEMBLY {
 
     main:
 
-    ch_versions = Channel.empty()
-    ch_flye_report = Channel.empty()
-    ch_alternate_assemblies = Channel.empty()
+    ch_versions = channel.empty()
+    ch_flye_report = channel.empty()
+    ch_alternate_assemblies = channel.empty()
 
      if ( params.assembler == "flye" ) {
 
-        ch_reads
-           .join( Channel.topic('mean_qualities') )
-           .set { ch_flye_input }
+        FLYE(
+            ch_reads.join( channel.topic('mean_qualities') )
+        )
 
-        FLYE( ch_flye_input )
-
-        FLYE.out.fasta.set { ch_assemblies }
+        ch_assemblies = FLYE.out.fasta
 
     } else if ( params.assembler == "hifiasm" ) {
 
         HIFIASM_WORKFLOW ( ch_reads )
 
-        HIFIASM_WORKFLOW.out.assemblies.set { ch_assemblies }
-        HIFIASM_WORKFLOW.out.draft_assembly_versions.set { ch_alternate_assemblies }
+        ch_assemblies           = HIFIASM_WORKFLOW.out.assemblies
+        ch_alternate_assemblies = HIFIASM_WORKFLOW.out.draft_assembly_versions
 
     } else {
         error ("Unknown assembler in this subworkflow: ${params.assembler}") // this should not happen

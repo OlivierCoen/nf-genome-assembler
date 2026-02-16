@@ -11,9 +11,9 @@ process PURGEDUPS_GETSEQS {
     tuple val(meta), path(assembly), path(bed)
 
     output:
-    tuple val(meta), path("*_hap.fa.gz"),                                                              emit: haplotigs
-    tuple val(meta), path("*_purged.fa.gz"),                                                           emit: purged
-    tuple val("${task.process}"), val('purgedups'), eval('purge_dups -h |& sed "3!d; s/.*: //"'),   topic: versions
+    tuple val(meta), path("*_hap.fa.gz"),                                                         emit: haplotigs
+    tuple val(meta), path("*_purged.fa.gz"),                                                      emit: purged
+    tuple val("${task.process}"), val('purgedups'), eval('purge_dups -h |& sed "3!d; s/.*: //"'), topic: versions
 
     script:
     def args = task.ext.args ?: ''

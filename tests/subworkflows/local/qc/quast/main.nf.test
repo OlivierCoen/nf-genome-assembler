@@ -15,11 +15,11 @@ nextflow_workflow {
                 script "subworkflows/local/map_long_reads_to_assembly/minimap2/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [ id: "test", genome_size: 1500000 ],
                         file( '$projectDir/tests/test_data/pecat/input/reads.fasta.gz', checkIfExists: true)
                     ])
-                    input[1] = Channel.of(
+                    input[1] = channel.of(
                         [
                             [ id: "test", genome_size: 1500000 ],
                             file( '$projectDir/tests/test_data/pecat/output/primary.fasta', checkIfExists: true)
@@ -57,13 +57,13 @@ nextflow_workflow {
                 script "subworkflows/local/map_long_reads_to_assembly/minimap2/main.nf"
                 process {
                     """
-                    input[0] = Channel.of(
+                    input[0] = channel.of(
                         [
                             [ id: "test", genome_size: 1500000 ],
                             file( '$projectDir/tests/test_data/pecat/input/reads.small.fasta.gz', checkIfExists: true)
                         ]
                     )
-                    input[1] = Channel.of(
+                    input[1] = channel.of(
                         [
                             [ id: "test", genome_size: 1500000 ],
                             file( '$projectDir/tests/test_data/pecat/output/primary.fasta', checkIfExists: true)
@@ -121,7 +121,7 @@ nextflow_workflow {
                 script "subworkflows/local/map_long_reads_to_assembly/minimap2/main.nf"
                 process {
                     """
-                    input[0] = Channel.of(
+                    input[0] = channel.of(
                         [
                             [ id: "test1", genome_size: 1500000 ],
                             file( '$projectDir/tests/test_data/pecat/input/reads.fasta.gz', checkIfExists: true)
@@ -131,7 +131,7 @@ nextflow_workflow {
                             file( '$projectDir/tests/test_data/pecat/input/reads.fasta.gz', checkIfExists: true)
                         ]
                     )
-                    input[1] = Channel.of(
+                    input[1] = channel.of(
                         [
                             [ id: "test1", genome_size: 1500000 ],
                             file( '$projectDir/tests/test_data/pecat/output/primary.fasta', checkIfExists: true)

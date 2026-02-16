@@ -29,8 +29,8 @@ workflow AUTO_ASSEMBLY {
 
     main:
 
-    ch_versions = Channel.empty()
-    ch_flye_report = Channel.empty()
+    ch_versions = channel.empty()
+    ch_flye_report = channel.empty()
 
     // --------------------------------------------------------
     // PRIMARY ASSEMBLY

@@ -14,7 +14,7 @@ workflow MEDAKA_WORKFLOW {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ---------------------------------------------------
     // Alignment to respective assembly
@@ -24,26 +24,22 @@ workflow MEDAKA_WORKFLOW {
     if ( params.mapper == 'winnowmap' ) {
 
         MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP ( ch_reads, ch_assemblies, bam_format )
-        MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.bam_ref.set { ch_bam_ref }
+        ch_bam_ref  = MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.bam_ref
         ch_versions = ch_versions.mix ( MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.versions )
 
     } else {
 
         MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2 ( ch_reads, ch_assemblies, bam_format )
-        MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.bam_ref.set { ch_bam_ref }
+        ch_bam_ref  = MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.bam_ref
         ch_versions = ch_versions.mix ( MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.versions )
 
     }
 
-    ch_bam_ref
-        .map { meta, bam, fasta -> [ meta, bam ] }
-        .set { ch_bam }
+    ch_bam = ch_bam_ref.map { meta, bam, fasta -> [ meta, bam ] }
 
-    SAMTOOLS_INDEX ( ch_bam )
+    SAMTOOLS_INDEX( ch_bam )
 
-    ch_bam
-        .join ( SAMTOOLS_INDEX.out.bai )
-        .set { ch_bam_bai }
+    ch_bam_bai = ch_bam.join( SAMTOOLS_INDEX.out.bai )
 
     // ---------------------------------------------------
     // Getting list of contigs
@@ -52,35 +48,32 @@ workflow MEDAKA_WORKFLOW {
     EXTRACT_CONTIG_IDS ( ch_assemblies, shuffle_contigs )
 
 
-    EXTRACT_CONTIG_IDS.out.contigs
-        .map { meta, file ->
-                [ meta,  file.splitCsv( strip: true ).flatten() ] // making list of contig IDS
-        }
-        .map { meta, contig_ids ->
-                def nb_contigs = contig_ids.size()
-                [ meta, contig_ids.collate( params.medaka_contig_chunksize ) ]
-        }
-        .transpose() // each chunk of contig IDS becomes a separate item
-        .map { meta, contig_ids ->
-                [ meta, contig_ids.join(' ') ]
-        }
-        .set { ch_contig_groups }
+    ch_contig_groups = EXTRACT_CONTIG_IDS.out.contigs
+                        .map { meta, file ->
+                                [ meta,  file.splitCsv( strip: true ).flatten() ] // making list of contig IDS
+                        }
+                        .map { meta, contig_ids ->
+                                def nb_contigs = contig_ids.size()
+                                [ meta, contig_ids.collate( params.medaka_contig_chunksize ) ]
+                        }
+                        .transpose() // each chunk of contig IDS becomes a separate item
+                        .map { meta, contig_ids ->
+                                [ meta, contig_ids.join(' ') ]
+                        }
 
     // ---------------------------------------------------
     // Polishing
     // ---------------------------------------------------
 
-    ch_bam_bai
-        .join ( ch_reads )
-        .combine( ch_contig_groups, by: 0 ) // all cartesian products joined by meta
-        .set { medaka_inference_input }
+    medaka_inference_input = ch_bam_bai
+                                .join ( ch_reads )
+                                .combine( ch_contig_groups, by: 0 ) // all cartesian products joined by meta
 
     MEDAKA_INFERENCE ( medaka_inference_input )
 
-    MEDAKA_INFERENCE.out.hdf
-        .groupTuple()
-        .join( ch_assemblies )
-        .set { medaka_sequence_input }
+    medaka_sequence_input = MEDAKA_INFERENCE.out.hdf
+                            .groupTuple()
+                            .join( ch_assemblies )
 
     MEDAKA_SEQUENCE ( medaka_sequence_input )
 
@@ -89,4 +82,3 @@ workflow MEDAKA_WORKFLOW {
     assembly = MEDAKA_SEQUENCE.out.polished_assembly
     versions = ch_versions                     // channel: [ versions.yml ]
 }
-

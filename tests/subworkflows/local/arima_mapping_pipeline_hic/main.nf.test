@@ -15,7 +15,7 @@ nextflow_workflow {
 
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id: "SRR4292758_00" ],
                         [
@@ -24,7 +24,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[1] = Channel.of (
+                input[1] = channel.of (
                         [
                             [ id: "W303_SGD_2015_JRIU00000000" ],
                              file( params.pipelines_testdata_base_path + 'reference/W303_SGD_2015_JRIU00000000.fsa', checkIfExists: true )
@@ -49,7 +49,7 @@ nextflow_workflow {
                 """
                 meta_reads = [ id: "small" ]
                 meta_genome = [ id: "ncbi" ]
-                ch_reads = Channel.fromPath( '$projectDir/tests/test_data/arima_hic/very_small_R*.fastq.gz', checkIfExists: true)
+                ch_reads = channel.fromPath( '$projectDir/tests/test_data/arima_hic/very_small_R*.fastq.gz', checkIfExists: true)
                 ch_reference_fasta = file( '$projectDir/tests/test_data/arima_hic/GCA_009176605.1_CNRS_Arma_nasa_1.0_genomic.fna', checkIfExists: true)
                 input[0] = [ meta_reads, ch_reads ]
                 input[1] = [ meta_genome, ch_reference_fasta ]

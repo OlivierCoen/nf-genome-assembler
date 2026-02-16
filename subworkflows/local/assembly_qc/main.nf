@@ -19,7 +19,7 @@ workflow ASSEMBLY_QC {
     ch_assemblies
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //CONTIG_STATS ( ch_assemblies )
 
@@ -33,20 +33,19 @@ workflow ASSEMBLY_QC {
         if ( params.quast_mapper == 'winnowmap' ) {
 
             MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP ( ch_long_reads, ch_assemblies, bam_format )
-            MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.bam_ref.set { ch_bam_ref }
+            ch_bam_ref  = MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.bam_ref
             ch_versions = ch_versions.mix ( MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP.out.versions )
 
         } else {
 
             MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2 ( ch_long_reads, ch_assemblies, bam_format )
-            MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.bam_ref.set { ch_bam_ref }
+            ch_bam_ref  = MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.bam_ref
             ch_versions = ch_versions.mix ( MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2.out.versions )
 
         }
 
-        ch_bam_ref
-            .map { meta, bam, assembly -> [ meta, assembly, bam ] } // inverting
-            .set { quast_input }
+        quast_input = ch_bam_ref
+                        .map { meta, bam, assembly -> [ meta, assembly, bam ] } // inverting
 
         QUAST( quast_input )
 
@@ -58,9 +57,7 @@ workflow ASSEMBLY_QC {
 
     if ( !params.skip_busco ) {
 
-        ch_assemblies
-            .groupTuple() // one run of BUSCO per meta
-            .set { busco_input }
+        busco_input = ch_assemblies.groupTuple() // one run of BUSCO per meta
 
         def busco_config_file = []
         def clean_intermediates = false
@@ -86,9 +83,8 @@ workflow ASSEMBLY_QC {
             params.meryl_k_value
         )
 
-        MERYL_COUNT.out.meryl_db
-            .combine( ch_assemblies, by: 0 ) // cartesian product with meta as matching key
-            .set { merqury_input }
+        merqury_input = MERYL_COUNT.out.meryl_db
+                            .combine( ch_assemblies, by: 0 ) // cartesian product with meta as matching key
 
         MERQURY( merqury_input )
 

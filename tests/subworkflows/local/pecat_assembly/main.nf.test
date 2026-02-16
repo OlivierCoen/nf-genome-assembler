@@ -16,7 +16,7 @@ nextflow_workflow {
 
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id: "test", genome_size: 1500000 ],
                         file( '$projectDir/tests/test_data/pecat/input/reads.small.fasta.gz', checkIfExists: true)
@@ -44,7 +44,7 @@ nextflow_workflow {
 
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id: "test", genome_size: 1500000 ],
                         file( '$projectDir/tests/test_data/pecat/input/reads.small.fasta.gz', checkIfExists: true)

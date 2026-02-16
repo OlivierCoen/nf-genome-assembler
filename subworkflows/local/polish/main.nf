@@ -10,19 +10,19 @@ workflow POLISH {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ---------------------------------------------------
     // Alignment to respective assembly
     // ---------------------------------------------------
 
-    ch_polished_assembly_versions = Channel.empty()
+    ch_polished_assembly_versions = channel.empty()
     ch_polished_assembly_versions = ch_polished_assembly_versions.mix ( ch_assemblies )
 
     if ( !params.skip_medaka ) {
 
         MEDAKA_WORKFLOW ( ch_reads, ch_assemblies )
-        ch_assemblies = MEDAKA_WORKFLOW.out.assembly
+        ch_assemblies                 = MEDAKA_WORKFLOW.out.assembly
         ch_polished_assembly_versions = ch_polished_assembly_versions.mix ( ch_assemblies )
     }
 

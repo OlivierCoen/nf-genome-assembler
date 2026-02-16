@@ -16,37 +16,34 @@ workflow ARIMA_MAPPING_PIPELINE_HIC {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ------------------------------------------------------------------------------------
     // SEPARATING HIC READS 1 AND 2
     // ------------------------------------------------------------------------------------
 
-    ch_hic_read_pairs
-        .multiMap { meta, reads ->
-            r1: [ meta, reads[0] ]
-            r2: [ meta, reads[1] ]
-        }
-        .set { ch_hic_reads }
+    ch_hic_reads = ch_hic_read_pairs
+                        .multiMap { meta, reads ->
+                            r1: [ meta, reads[0] ]
+                            r2: [ meta, reads[1] ]
+                        }
 
-    ch_hic_reads.r1
-        .mix( ch_hic_reads.r2 )
-        .set { ch_hic_reads }
+    ch_hic_reads = ch_hic_reads.r1
+                    .mix( ch_hic_reads.r2 )
+        .
 
     // ------------------------------------------------------------------------------------
     // MAPPING EACH READ FILE TO GENOME
     // ------------------------------------------------------------------------------------
 
     BWAMEM2_INDEX ( ch_reference_genome_fasta )
-    BWAMEM2_INDEX.out.index.set { ch_reference_genome_index }
+    ch_reference_genome_index = BWAMEM2_INDEX.out.index
 
-    ch_reference_genome_fasta
-        .join( ch_reference_genome_index )
-        .set { ch_fasta_fai }
+    ch_fasta_fai = ch_reference_genome_fasta
+                    .join( ch_reference_genome_index )
 
-    ch_hic_reads
-        .combine( ch_fasta_fai, by: 0)
-        .set { bwamem2_input }
+    bwamem2_input = ch_hic_reads
+                      .combine( ch_fasta_fai, by: 0)
 
     def sort_bam = false
     BWAMEM2_MEM (
@@ -60,15 +57,14 @@ workflow ARIMA_MAPPING_PIPELINE_HIC {
 
     ARIMA_FILTER_FIVE_END ( BWAMEM2_MEM.out.bam )
 
-    ARIMA_FILTER_FIVE_END.out.bam
-        .groupTuple()
-        .map {
-            meta, files ->
-                def (read_1, read_2) = files
-                [ meta, read_1, read_2 ]
-        }
-        .join( ch_reference_genome_index )
-        .set { arima_combiner_input }
+    arima_combiner_input = ARIMA_FILTER_FIVE_END.out.bam
+                            .groupTuple()
+                            .map {
+                                meta, files ->
+                                    def (read_1, read_2) = files
+                                    [ meta, read_1, read_2 ]
+                            }
+                            .join( ch_reference_genome_index )
 
     def mapq_filter = 10
     ARIMA_TWO_BAM_COMBINER (
@@ -106,4 +102,3 @@ workflow ARIMA_MAPPING_PIPELINE_HIC {
     alignment = PICARD_MARKDUPLICATES.out.bam
     versions = ch_versions                     // channel: [ versions.yml ]
 }
-

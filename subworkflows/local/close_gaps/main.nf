@@ -10,7 +10,7 @@ workflow CLOSE_GAPS {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     NTLINK_GAP_FILL (
         ch_assemblies.join ( ch_long_reads )

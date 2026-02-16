@@ -11,13 +11,13 @@ nextflow_process {
 
             process {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id: "test", genome_size: 1500000 ],
                         file( '$projectDir/tests/test_data/pecat/input/reads.small.fasta.gz', checkIfExists: true)
                     ]
                 )
-                input[1] = Channel.fromPath( "${projectDir}/tests/test_data/pecat/input/pecat_optional_config.txt", checkIfExists: true )
+                input[1] = channel.fromPath( "${projectDir}/tests/test_data/pecat/input/pecat_optional_config.txt", checkIfExists: true )
                 """
             }
         }

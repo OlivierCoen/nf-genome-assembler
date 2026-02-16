@@ -14,7 +14,7 @@ workflow SCAFFOLDING_WITH_HIC {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ------------------------------------------------------------------------------------
     // MAPPING OF HI-C READS TO ASSEMBLY
@@ -23,7 +23,7 @@ workflow SCAFFOLDING_WITH_HIC {
     if ( params.skip_arima_hic_mapping_pipeline ) {
 
         if ( params.hic_reads_mapping ) {
-            ch_hic_bam = Channel.fromPath( params.hic_reads_mapping, checkExists: true )
+            ch_hic_bam = channel.fromPath( params.hic_reads_mapping, checkExists: true )
         } else {
             error("You must provide a BAM file consisting of Hi-C reads mapped to the current assembly if you set --skip_arima_hic_mapping_pipeline")
         }
@@ -35,7 +35,7 @@ workflow SCAFFOLDING_WITH_HIC {
             ch_assemblies
         )
 
-        ARIMA_MAPPING_PIPELINE_HIC.out.alignment.set { ch_hic_bam }
+        ch_hic_bam  =  ARIMA_MAPPING_PIPELINE_HIC.out.alignment
         ch_versions = ch_versions.mix ( ARIMA_MAPPING_PIPELINE_HIC.out.versions )
 
     }
@@ -59,13 +59,12 @@ workflow SCAFFOLDING_WITH_HIC {
 
     SAMTOOLS_FAIDX ( ch_assemblies )
 
-    ch_hic_bam
-        .join( ch_assemblies )
-        .join( SAMTOOLS_FAIDX.out.fai )
-        .set { yahs_input }
+    yahs_input = ch_hic_bam
+                    .join( ch_assemblies )
+                    .join( SAMTOOLS_FAIDX.out.fai )
 
     YAHS ( yahs_input )
-    YAHS.out.scaffolds_fasta.set { ch_scaffolded_assemblies }
+    ch_scaffolded_assemblies = YAHS.out.scaffolds_fasta
 
     // ------------------------------------------------------------------------------------
     // COMPUTING Nx / Lx FOR NEW SCAFFOLDED ASSEMBLY
@@ -76,5 +75,5 @@ workflow SCAFFOLDING_WITH_HIC {
 
     emit:
     scaffolded_assemblies          = ch_scaffolded_assemblies
-    versions                          = ch_versions                     // channel: [ versions.yml ]
+    versions                       = ch_versions                     // channel: [ versions.yml ]
 }

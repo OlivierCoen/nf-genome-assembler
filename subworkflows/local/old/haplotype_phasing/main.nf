@@ -26,7 +26,7 @@ workflow HAPLOTYPE_PHASING {
     ch_assemblies
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // --------------------------------------------------------
     // ALIGNING READS TO REFERENCE
@@ -153,4 +153,3 @@ workflow HAPLOTYPE_PHASING {
     stats = WHATSHAP_STATS.out.stats
     versions = ch_versions                     // channel: [ versions.yml ]
 }
-

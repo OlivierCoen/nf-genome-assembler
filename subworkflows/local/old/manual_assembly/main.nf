@@ -7,7 +7,7 @@ include { DRAFT_ASSEMBLY as HAPLOTYPE_DRAFT_ASSEMBLY                         } f
 include { POLISH                                                             } from '../polish/main'
 
 include { HAPLOTYPE_PHASING                                                  } from '../haplotype_phasing'
-include { HAPLOTIG_PURGING                                                   } from '../haplotig_purging'
+include { PURGE_DUPLICATES                                                   } from '../purge_duplicates'
 
 
 /*
@@ -64,8 +64,8 @@ workflow MANUAL_ASSEMBLY {
 
     main:
 
-    ch_versions = Channel.empty()
-    ch_haplotypes = Channel.empty()
+    ch_versions = channel.empty()
+    ch_haplotypes = channel.empty()
 
     // ------------------------------------------------------------------------------------
     // READ PREPARATION
@@ -122,19 +122,19 @@ workflow MANUAL_ASSEMBLY {
 
     if ( params.assembly_mode == "diploid" ) {
 
-        HAPLOTIG_PURGING (
+        PURGE_DUPLICATES (
             ch_prepared_reads,
             ch_draft_assemblies
         )
 
-        HAPLOTIG_PURGING.out.purged_assemblies.set { ch_assemblies }
+        PURGE_DUPLICATES.out.purged_assemblies.set { ch_assemblies }
 
         ch_all_draft_assembly_versions_and_alternatives
-            .mix ( HAPLOTIG_PURGING.out.purged_assemblies )
+            .mix ( PURGE_DUPLICATES.out.purged_assemblies )
             .set { ch_all_draft_assembly_versions_and_alternatives }
 
         ch_versions = ch_versions
-                        .mix ( HAPLOTIG_PURGING.out.versions )
+                        .mix ( PURGE_DUPLICATES.out.versions )
 
     } else { // haplotype
 

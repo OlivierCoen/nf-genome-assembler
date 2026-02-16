@@ -10,19 +10,16 @@ workflow MAP_LONG_READS_TO_ASSEMBLY_MINIMAP2 {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // ---------------------------------------------------
     // Alignment to respective assembly
     // ---------------------------------------------------
-    ch_reads
-        .combine( ch_genome_assembly, by: [0] )  // cartesian product with meta as matching key
-        .set { align_input }
 
-    MINIMAP2_ALIGN( align_input, bam_format )
-
-    MINIMAP2_ALIGN.out.bam_ref.set { aln_to_assembly_bam_ref }
-    MINIMAP2_ALIGN.out.index.set { aln_to_assembly_bai }
+    MINIMAP2_ALIGN(
+        ch_reads.combine( ch_genome_assembly, by: [0] )  // cartesian product with meta as matching key,
+        bam_format
+    )
 
     // ---------------------------------------------------
     // BAM stats

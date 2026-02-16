@@ -14,7 +14,7 @@ workflow MULTIQC_WORKFLOW {
 
     main:
 
-    ch_multiqc_files = Channel.empty()
+    ch_multiqc_files = channel.empty()
 
     // ------------------------------------------------------------------------------------
     // VERSIONS
@@ -24,7 +24,7 @@ workflow MULTIQC_WORKFLOW {
     // TODO: use the nf-core functions when they are adapted to channel topics
 
     // Collate and save software versions
-    formatVersionsToYAML ( Channel.topic('versions') )
+    formatVersionsToYAML ( channel.topic('versions') )
         .mix ( softwareVersionsToYAML( ch_versions ) ) // mix with versions obtained from emit outputs
         .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'software_mqc_versions.yml', sort: true, newLine: true)
         .set { ch_collated_versions }
@@ -34,24 +34,24 @@ workflow MULTIQC_WORKFLOW {
     // CONFIG
     // ------------------------------------------------------------------------------------
 
-    ch_multiqc_config = Channel.fromPath( "$projectDir/assets/multiqc_config.yml", checkIfExists: true )
+    ch_multiqc_config = channel.fromPath( "$projectDir/assets/multiqc_config.yml", checkIfExists: true )
 
     summary_params = paramsSummaryMap( workflow, parameters_schema: "nextflow_schema.json")
-    ch_workflow_summary = Channel.value( paramsSummaryMultiqc(summary_params) )
+    ch_workflow_summary = channel.value( paramsSummaryMultiqc(summary_params) )
 
     ch_multiqc_custom_config = params.multiqc_config ?
-                                    Channel.fromPath(params.multiqc_config, checkIfExists: true) :
-                                    Channel.empty()
+                                    channel.fromPath(params.multiqc_config, checkIfExists: true) :
+                                    channel.empty()
 
     ch_multiqc_logo = params.multiqc_logo ?
-                        Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
-                        Channel.empty()
+                        channel.fromPath(params.multiqc_logo, checkIfExists: true) :
+                        channel.empty()
 
     ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
                                                 file(params.multiqc_methods_description, checkIfExists: true) :
                                                 file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
-    ch_methods_description = Channel.value( methodsDescriptionText(ch_multiqc_custom_methods_description) )
+    ch_methods_description = channel.value( methodsDescriptionText(ch_multiqc_custom_methods_description) )
 
     // Adding metadata to MultiQC
     ch_multiqc_files = ch_multiqc_files
@@ -64,17 +64,17 @@ workflow MULTIQC_WORKFLOW {
     // ------------------------------------------------------------------------------------
 
     ch_multiqc_files
-        .mix( Channel.topic('mqc_busco_batch_summary') )
-        .mix( Channel.topic('mqc_busco_short_summaries_txt') )
-        .mix( Channel.topic('mqc_nx_assembly_stats') )
-        .mix( Channel.topic('mqc_lx_assembly_stats') )
-        .mix( Channel.topic('mqc_fastqc_zip') )
-        .mix( Channel.topic('mqc_flye_report') )
-        .mix( Channel.topic('mqc_assembly_qv') )
-        .mix( Channel.topic('mqc_contigs_qv') )
-        .mix( Channel.topic('mqc_nanoq_report') )
-        .mix( Channel.topic('mqc_quast_report') )
-        .mix( Channel.topic('mqc_pretextsnapshot') )
+        .mix( channel.topic('mqc_busco_batch_summary') )
+        .mix( channel.topic('mqc_busco_short_summaries_txt') )
+        .mix( channel.topic('mqc_nx_assembly_stats') )
+        .mix( channel.topic('mqc_lx_assembly_stats') )
+        .mix( channel.topic('mqc_fastqc_zip') )
+        .mix( channel.topic('mqc_flye_report') )
+        .mix( channel.topic('mqc_assembly_qv') )
+        .mix( channel.topic('mqc_contigs_qv') )
+        .mix( channel.topic('mqc_nanoq_report') )
+        .mix( channel.topic('mqc_quast_report') )
+        .mix( channel.topic('mqc_pretextsnapshot') )
         .set { ch_multiqc_files }
 
     MULTIQC (

@@ -12,7 +12,7 @@ workflow MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     def winnowmap_meryl_k_value = 15
     MERYL_COUNT(
@@ -23,12 +23,14 @@ workflow MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP {
     MERYL_PRINT( MERYL_COUNT.out.meryl_db )
 
     // Grouping by meta and giving to Winnowmap
-    MERYL_PRINT.out.repetitive_kmers
-        .join( ch_assembly_fasta )
-        .combine( ch_reads, by: 0 ) // cartesian product with meta as matching key
-        .set { ch_winnowmap_input }
+    ch_winnowmap_input = MERYL_PRINT.out.repetitive_kmers
+                            .join( ch_assembly_fasta )
+                            .combine( ch_reads, by: 0 ) // cartesian product with meta as matching key
 
-    WINNOWMAP ( ch_winnowmap_input, bam_format )
+    WINNOWMAP (
+        ch_winnowmap_input,
+        bam_format
+    )
 
 
     emit:
@@ -37,4 +39,3 @@ workflow MAP_LONG_READS_TO_ASSEMBLY_WINNOWMAP {
     bai     = WINNOWMAP.out.index
     versions = ch_versions                     // channel: [ versions.yml ]
 }
-

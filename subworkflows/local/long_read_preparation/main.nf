@@ -21,15 +21,14 @@ workflow LONG_READ_PREPARATION {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // the pipeline accepts reads in fasta / fastq format
-    ch_reads
-        .filter {
-            meta, reads ->
-                reads.name.endsWith('.fastq') || reads.name.endsWith('.fastq.gz') || reads.name.endsWith('.fq') || reads.name.endsWith('.fq.gz')
-        }
-        .set { ch_reads }
+    ch_reads = ch_reads
+                .filter {
+                    meta, reads ->
+                        reads.name.endsWith('.fastq') || reads.name.endsWith('.fastq.gz') || reads.name.endsWith('.fq') || reads.name.endsWith('.fq.gz')
+                }
 
     //SEQKIT_SANA(ch_reads)
     //ch_reads = SEQKIT_SANA.out.fastq
