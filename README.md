@@ -12,7 +12,7 @@
 
 ## Introduction
 
-**nf-genome-assembler** is a bioinformatics pipeline that is designed to assemble genomes from long-read sequencing data and optionally Hi-C data. It is built using Nextflow, a workflow management system that allows for the creation of reproducible and scalable pipelines.
+**nf-genome-assembler** is a bioinformatics pipeline that is designed to assemble genomes from long-read sequencing data and Hi-C data. It is built using Nextflow, a workflow management system that allows for the creation of reproducible and scalable pipelines.
 
 ## Installation
 
@@ -20,29 +20,41 @@ Please check the [installation instructions](docs/install.md) for more details o
 
 ## Running the pipeline
 
-
 First, prepare a samplesheet with your input data that looks as follows:
 
+`samplesheet.yaml`:
+
+```yaml
+- name: my_assembly
+  platform: nanopore
+  reads: /path/to/ont_reads.fastq.gz
+  hic_fastq_1: /path/to/hic_read_r1.fastq.gz
+  hic_fastq_2: /path/to/hic_read_r2.fastq.gz
+  genome_size: 1000000000
+  assembly: /path/to/assembly
+```
+
+It can also be a `CSV` samplesheet:
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+name,platform,reads,hic_fastq_1,hic_fastq_2,genome_size,assembly
+my_assembly,nanopore,/path/to/ont_reads.fastq.gz,/path/to/hic_read_r1.fastq.gz,/path/to/hic_read_r2.fastq.gz,1000000000,/path/to/assembly
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+>[!NOTE]
+> The `assembly` column is also optional and serves only when you want to skip early steps and continue with a specific assembly.
+> The `genome_size` column is optional and serves only for `Flye` to estimate the expected genome size.
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
 ```bash
 nextflow run OlivierCoen/nf-genome-assembler \
-   -profile <docker/singularity/.../institute> \
+   -latest \
+   -profile <docker/apptainer/conda/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
+   -resume
 ```
 
 > [!WARNING]
