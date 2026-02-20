@@ -1,4 +1,4 @@
-# EGCE/genomeassembler: Citations
+# nf-genome-assembler: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

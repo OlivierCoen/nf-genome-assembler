@@ -23,7 +23,7 @@ include { REPORTING                                                          } f
 */
 
 
-workflow GENOMEASSEMBLER {
+workflow GENOME_ASSEMBLER {
 
     take:
     ch_input // channel: samplesheet read in from --input

@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the EGCE/genomeassembler pipeline
+// Subworkflow with functionality specific to the nf-genome-assembler pipeline
 //
 
 /*

@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    EGCE/genomeassembler
+    nf-genome-assembler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/EGCE/genomeassembler
+    Github : https://github.com/nf-genome-assembler
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { GENOMEASSEMBLER                } from './workflows/genomeassembler'
+include { GENOME_ASSEMBLER               } from './workflows/genomeassembler'
 include { PIPELINE_INITIALISATION        } from './subworkflows/local/utils_nfcore_genomeassembler_pipeline'
 include { PIPELINE_COMPLETION            } from './subworkflows/local/utils_nfcore_genomeassembler_pipeline'
 /*
@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION            } from './subworkflows/local/utils_nfco
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow EGCE_GENOMEASSEMBLER {
+workflow NF_GENOME_ASSEMBLER {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -35,11 +35,11 @@ workflow EGCE_GENOMEASSEMBLER {
     //
     // WORKFLOW: Run pipeline
     //
-    GENOMEASSEMBLER (
+    GENOME_ASSEMBLER (
         samplesheet
     )
     emit:
-    multiqc_report = GENOMEASSEMBLER.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = GENOME_ASSEMBLER.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,7 +65,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    EGCE_GENOMEASSEMBLER (
+    NF_GENOME_ASSEMBLER (
         PIPELINE_INITIALISATION.out.samplesheet
     )
     //
@@ -77,7 +77,7 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        EGCE_GENOMEASSEMBLER.out.multiqc_report
+        NF_GENOME_ASSEMBLER.out.multiqc_report
     )
 }
 

@@ -1,6 +1,6 @@
 {
-    "name": "EGCE/genomeassembler",
-    "homePage": "https://github.com/EGCE/genomeassembler",
+    "name": "nf-genome-assembler",
+    "homePage": "https://github.com/nf-genome-assembler",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

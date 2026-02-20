@@ -1,4 +1,4 @@
-# EGCE/genomeassembler: Output
+# nf-genome-assembler: Output
 
 ## Introduction
 
